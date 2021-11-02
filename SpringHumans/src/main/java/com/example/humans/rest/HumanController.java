@@ -47,6 +47,7 @@ public class HumanController {
 	// UPDATE
 	@PutMapping("/replace/{id}")
 	public Human replaceHuman(@PathVariable Integer id, @RequestBody Human newHuman) {
+		this.humans.set(id, newHuman)
 		System.out.println("Replacing human with id " + id + " with " + newHuman);
 		return null;
 	}
@@ -54,6 +55,7 @@ public class HumanController {
 	// DELETE
 	@DeleteMapping("/remove/{id}")
 	public Human removeHuman(@PathVariable Integer id) {
+		this.humans.remove(id);
 		System.out.println("Removing human with id " + id);
 		return null;
 	}
