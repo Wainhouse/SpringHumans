@@ -1,3 +1,5 @@
+// The controller talks to the frontend;
+
 package com.example.humans.rest;
 
 import java.util.ArrayList;
@@ -16,10 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.humans.domain.Human;
 import com.example.humans.service.HumanService;
 
-@RestController
+@RestController // enables request handling
+
 public class HumanController {
 
 	private List<Human> humans = new ArrayList<>();
+
+	// Creating private list because we're not implementing the database yet
 	private HumanService service;
 
 	public HumanController() {
@@ -27,6 +32,7 @@ public class HumanController {
 		this.service = service;
 	}
 
+	// checking that spring is working
 	@GetMapping("/hello-Human") // listening-for-a-get-request
 	public String helloHuman() { // a human object in the request body
 		return "Hello Human";
@@ -34,35 +40,43 @@ public class HumanController {
 
 	// CREATE
 	@PostMapping("/create-Human") // trigger a post request
-	// public Human createHuman(@RequestBody Human newHuman) { // a human object in
-	// the request body
 	public ResponseEntity<Human> createHuman(@RequestBody Human newHuman) {
-		// this.humans.add(newHuman);
-		// System.out.println(newHuman);
-		// return this.humans.get(this.humans.size() -1);
 		Human responseBody = this.service.createHuman(newHuman);
 		return new ResponseEntity<Human>(responseBody, HttpStatus.CREATED);
 
 	}
 
-	// RETURN
+	// Reading
+	// returning a list of everything in humans list to the console.
 	@GetMapping("/getAll") // we are returning the list to the console
 	public ResponseEntity<List<Human>> getHumans() {
 		return ResponseEntity.ok(this.service.getHumans());
 	}
 
 	// RETURN
-	@GetMapping("/get/{id}") // getpuppy with id of {id}
-	public Human getHuman(@PathVariable Integer id) {
+	@GetMapping("/get/{id}") // gethuman with id of {id}
+	public Human getHuman(@PathVariable Integer id) { //// Getting human with id of {id} // Pathvariable gets the index
+														//// position from the URL e.g localhost/8080/get/01
 		return this.service.getHuman(id);
 	}
 
-	// UPDATE
+	// UPDATE - Getting a specfic index in the list
 	@PutMapping("/replace/{id}")
-	public ResponseEntity<Human> replaceHuman(@PathVariable Integer id, @RequestBody Human newHuman) {
+	public ResponseEntity<Human> replaceHuman(@PathVariable Integer id, @RequestBody Human newHuman) { // @RequestBody
+																										// will create a
+																										// new human
+																										// object(internally
+																										// an object
+																										// mapper
+																										// converts the
+																										// jason code
+																										// back to java)
 		// this.humans.set(id, newHuman);
 
-		System.out.println("Replacing human with id " + id + " with " + newHuman);
+		System.out.println("Replacing human with id " + id + " with " + newHuman); // changing the references so that
+																					// we're refereing to humanservices
+																					// (aliased as service) and the
+																					// methods in there
 		Human body = this.service.replaceHuman(id, newHuman);
 
 		return new ResponseEntity<Human>(body, HttpStatus.ACCEPTED);
